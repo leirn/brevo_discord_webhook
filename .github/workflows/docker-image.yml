@@ -30,5 +30,5 @@ jobs:
         name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: apibackend
+          name: brevo_webhook
           path: /tmp/brevo_webhook.tar
