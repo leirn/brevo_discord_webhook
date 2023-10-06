@@ -19,5 +19,5 @@ async fn ip(req: HttpRequest) -> impl Responder {
     log::debug!("Peer addr : {peer_addr}");
     log::debug!("Real ip remote addr : {real_remote_addr}");
 
-    HttpResponse::Ok().body(format!("<html><head><title>What's your ip</title></head><body><h1>What's you ip ?</h1>Your peer address is {peer_addr}<br/>You real address is {real_remote_addr}</body></html>"))
+    HttpResponse::Ok().body(format!("<html><head><title>What's your ip</title></head><body><h1>What's your ip ?</h1>Your ip address is {real_remote_addr}</body></html>"))
 }
