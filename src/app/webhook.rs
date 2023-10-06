@@ -1,9 +1,8 @@
+use super::brevo_events::embed_builder;
 use actix_web::{post, web, web::ServiceConfig, HttpResponse, Responder};
 use log::info;
-use serde::Serialize;
-use std::env;
-
 use std::collections::HashMap;
+use std::env;
 
 use crate::security::ip_filtering::IPFiltering;
 
@@ -11,20 +10,6 @@ pub fn register_routes(cfg: &mut ServiceConfig) {
     cfg.service(web::scope("/webhook").service(webhook).wrap(IPFiltering));
 
     info!("webhook routes loaded");
-}
-
-#[derive(Serialize, Debug)]
-struct DiscordEmbedField {
-    pub name: String,
-    pub value: String,
-    pub inline: bool,
-}
-
-#[derive(Serialize, Debug)]
-struct DiscordEmbed {
-    pub title: String,
-    pub color: u32,
-    pub fields: Vec<DiscordEmbedField>,
 }
 
 #[post("/event")]
@@ -42,19 +27,7 @@ async fn webhook(info: web::Json<serde_json::Value>) -> impl Responder {
 
     log::debug!("Event type is {event}");
 
-    let mut embed = DiscordEmbed {
-        title: event,
-        color: 0x550088,
-        fields: vec![],
-    };
-
-    for (key, value) in info.into_iter() {
-        embed.fields.push(DiscordEmbedField {
-            name: key.to_string(),
-            value: value.to_string(),
-            inline: false,
-        })
-    }
+    let embed = embed_builder(event, info);
 
     let mut map = HashMap::new();
     map.insert("embeds", vec![embed]);

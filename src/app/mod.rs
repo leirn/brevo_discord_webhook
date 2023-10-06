@@ -1,3 +1,4 @@
+pub mod brevo_events;
 pub mod ip;
 pub mod webhook;
 
