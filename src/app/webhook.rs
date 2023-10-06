@@ -23,7 +23,7 @@ struct DiscordEmbedField {
 #[derive(Serialize, Debug)]
 struct DiscordEmbed {
     pub title: String,
-    pub description: String,
+    pub color: u32,
     pub fields: Vec<DiscordEmbedField>,
 }
 
@@ -44,7 +44,7 @@ async fn webhook(info: web::Json<serde_json::Value>) -> impl Responder {
 
     let mut embed = DiscordEmbed {
         title: event,
-        description: "description".to_string(),
+        color: 0x550088,
         fields: vec![],
     };
 
