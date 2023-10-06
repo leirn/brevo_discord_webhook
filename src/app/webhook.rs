@@ -28,27 +28,33 @@ async fn webhook(info: web::Json<serde_json::Value>) -> impl Responder {
     log::debug!("Event type is {event}");
 
     let embed = embed_builder(event, info);
+    let mut result = true;
+    if embed.is_some() {
+        let embed = embed.unwrap();
+        let mut map = HashMap::new();
+        map.insert("embeds", vec![embed]);
 
-    let mut map = HashMap::new();
-    map.insert("embeds", vec![embed]);
+        let map_str = serde_json::to_string(&map).unwrap();
 
-    let map_str = serde_json::to_string(&map).unwrap();
+        log::debug!("{map_str}");
 
-    log::debug!("{map_str}");
+        let url = env::var("DISCORD_WEBHOOK_TOKEN").expect("$DISCORD_WEBHOOK_TOKEN is not set");
 
-    let url = env::var("DISCORD_WEBHOOK_TOKEN").expect("$DISCORD_WEBHOOK_TOKEN is not set");
-
-    let client = reqwest::Client::builder()
-        .danger_accept_invalid_certs(true)
-        .build()
-        .unwrap();
-    let result = client.post(url).json(&map).send().await;
-
+        let client = reqwest::Client::builder()
+            .danger_accept_invalid_certs(true)
+            .build()
+            .unwrap();
+        let response = client.post(url).json(&map).send().await;
+        result = match response {
+            Ok(_) => true,
+            Err(error) => {
+                log::info!("{error}");
+                false
+            }
+        };
+    }
     match result {
-        Ok(_) => HttpResponse::Ok().body("Ok"),
-        Err(error) => {
-            log::info!("{error}");
-            HttpResponse::InternalServerError().body("Error while processing requests")
-        }
+        true => HttpResponse::Ok().body("Ok"),
+        false => HttpResponse::InternalServerError().body("Error while processing requests"),
     }
 }
