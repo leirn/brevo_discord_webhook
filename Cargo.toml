@@ -1,0 +1,33 @@
+[package]
+name = "brevo_discord_webhook"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.69.0"
+description = "A simple webhook listener that receives Brevo event and publish them to a discord channel"
+repository = "https://github.com/leirn/brevo_discord_webhook/"
+documentation = "https://github.com/leirn/brevo_discord_webhook/README.md"
+authors = ["Laurent Vromman <laurent@vromman.org>"]
+readme = "README.md"
+license = "MIT"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix = "0.13.0"
+actix-rt = "2.9.0"
+actix-cors = "0.6.4"
+actix-web = "4.3.1"
+actix-test  ="0.1.2"
+
+serde = {version = "1.0.163", features = ["derive"] }
+serde_json = "1.0.96"
+
+env_logger = "0.10.0"
+log = "0.4"
+
+reqwest = { version = "0.11", default-features = false, features = ["blocking", "json", "rustls-tls"] }
+
+derive_more = "0.99" # MIT
+
+iprange = "0.6.7"
+ipnet = "2.8.0"

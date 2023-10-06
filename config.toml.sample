@@ -1,0 +1,7 @@
+[env]
+HOST = "127.0.0.1"
+PORT = "8080"
+RUST_BACKTRACE="1"
+RUST_LOG="debug"
+AUTHORIZED_IP_RANGES="192.168.1.0/24,127.0.0.1/32"
+DISCORD_WEBHOOK_TOKEN="https://discord.com/api/webhooks/webhook_id/webhook_token"
